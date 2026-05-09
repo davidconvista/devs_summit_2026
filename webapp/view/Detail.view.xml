@@ -1,0 +1,13 @@
+<mvc:View
+    controllerName="devssummit2026.controller.Detail"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc">
+	<Page
+        showNavButton="true"
+		navButtonPress=".onNavBack"
+		title="{i18n>detailPageTitle}">
+        <ObjectHeader
+			intro="{Nombre}"
+			title="{Region}"/>
+	</Page>
+</mvc:View>

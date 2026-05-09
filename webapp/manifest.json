@@ -76,6 +76,10 @@
         "dataSource": "mainService",
         "preload": true,
         "settings": {}
+      },
+      "localModel": {
+        "type": "sap.ui.model.json.JSONModel",
+        "uri": "model/localModel.json"
       }
     },
     "resources": {
@@ -104,12 +108,30 @@
           "target": [
             "TargetMain"
           ]
+        },
+        {
+          "pattern": "detail/{currencyPath}",
+          "name": "detail",
+          "target": "detail"
+        },
+        {
+          "pattern": "smartview",
+          "name": "smartview",
+          "target": "smartview"
         }
       ],
       "targets": {
         "TargetMain": {
           "id": "Main",
           "name": "Main"
+        },
+        "detail": {
+          "id": "detail",
+          "name": "Detail"
+        },
+        "smartview": {
+          "id": "smartview",
+          "name": "SmartView"
         }
       }
     },

@@ -1,6 +1,87 @@
 <mvc:View controllerName="devssummit2026.controller.Main"
     xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
     xmlns="sap.m">
-    <Page id="page" title="{i18n>title}">
+    <Page id="page" title="{i18n>title}"
+		class="sapUiContentPadding sapUiResponsivePadding--header sapUiResponsivePadding--subHeader sapUiResponsivePadding--content sapUiResponsivePadding--footer">
+        <!-- Search field to filter data -->
+		<SearchField width="100%" search=".onSearch" />
+		<!-- ComboBox para filtrar monedas -->
+		<ComboBox
+				change=".onSelectingCurrency"
+				showClearIcon="true"
+				items="{
+					path: 'localModel>/Currencies',
+					sorter: { path: 'currencyName' }
+				}">
+			<core:Item key="{localModel>currencyCode}" text="{localModel>currencyName}" />
+		</ComboBox>
+		<Button text="Upload Data" press="onUploadData"/>
+		<Button text="Get Tasa USD" press="onGetTasaUSD"/>
+        <Table id="testTable" items="{/ZC_FOREX_CURRENCY}" class="sapUiSmallMarginTop" mode="SingleSelectLeft" growing="true" growingThreshold="100">
+            <columns>
+			<Column
+				width="12em">
+				<Text text="Moneda" />
+			</Column>
+			<Column
+				minScreenWidth="Desktop"
+				demandPopin="true"
+				hAlign="End">
+				<Text text="Descripción" />
+			</Column>
+			<Column
+				minScreenWidth="Desktop"
+				demandPopin="true"
+				hAlign="Center">
+				<Text text="Region" />
+			</Column>
+			<Column
+				hAlign="End">
+				<Text text="Tasa USD" />
+			</Column>
+			<Column
+				hAlign="Center">
+				<Text text="Estado" />
+			</Column>
+            <Column
+				hAlign="End">
+				<Text text="Last Sync" />
+			</Column>
+		</columns>
+		<items>
+			<ColumnListItem vAlign="Middle" type="Navigation" press=".onCurrencyPress">
+				<cells>
+					<ObjectIdentifier
+						title="{Moneda}"
+						text="{Simbolo}"/>
+					<Text
+						text="{Nombre}" />
+					<Text
+						text="{Region}" />
+					<Text
+						text="{TasaUSD}" />
+					<core:Icon
+						src="{path: 'Status', formatter: '.formatter.statusIcon'}" color="{path: 'Status', formatter: '.formatter.statusIconColor'}"/>
+                    <Text
+						text="{path: 'LastSync',type:'sap.ui.model.type.Date',formatOptions: { UTC: true}}" />
+				</cells>
+			</ColumnListItem>
+		</items>
+        </Table>
+		<footer>
+			<OverflowToolbar>
+				<Button
+					icon="sap-icon://alert"
+					text="{= ${message>/}.length }"
+					visible="{= ${message>/}.length > 0 }"
+					type="Emphasized"
+					press=".onMessagePopoverPress" />
+				<ToolbarSpacer/>
+				<Button text="Ir a Smart View" press="onNavigateToSmartView"/>
+				<Button text="Crear" press="onCreateTest"/>
+				<Button text="Borrar" press="onDeleteTest"/>
+			</OverflowToolbar>
+		</footer>
     </Page>
 </mvc:View>
