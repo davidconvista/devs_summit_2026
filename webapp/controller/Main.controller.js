@@ -23,6 +23,10 @@ sap.ui.define([
 			this.getView().setModel(Messaging.getMessageModel(), "message");
             // activate automatic message generation for complete view
 			Messaging.registerObject(this.getView(), true);
+
+            // set model size limit
+            var oModel = this.getOwnerComponent().getModel();
+                oModel.setSizeLimit(500);
         },
 
         onSearch: function(oEvent){
@@ -82,19 +86,11 @@ sap.ui.define([
             oModel.callFunction("/upload_data_api", {
                 method: 'POST',
                 success: function(data){
-                    Messaging.removeAllMessages();
-                    data.results.forEach(function(message){
-                        const oMessage = new Message({
-                            message: message.Message,
-                            type: formatter.formatMessageType(message.Type),
-                            target: "/Dummy",
-                            processor: oView.getModel()
-                        });
-                        Messaging.addMessages(oMessage);
-                    })                    
+                    oModel.refresh(true);
+                    sap.m.MessageBox.success("Operación ejecutada correctamente");                  
                 },
                 error: function(error){
-                    debugger;
+                    sap.m.MessageBox.error("Error al ejecutar la operación");
                 }
             })
         },
@@ -102,26 +98,30 @@ sap.ui.define([
         onGetTasaUSD: function(oEvent){
             let oView = this.getView();
             let oModel = this.getView().getModel();
+            let rowSelected = this.getView().byId("testTable").getSelectedItem();
+            // Comprobamos que se haya seleccionado una fila, si no, mostramos un mensaje de error
+            if(!rowSelected){
+                // añade mensaje de error
+                sap.m.MessageBox.error("Se necesita seleccionar al menos una fila para ejecutar la acción");
+                return;
+            } 
+            // recogemos las propiedades que se necesitan (deberás ver cuáles son en la descripción del function import en el metadata)
+            let rowObject = rowSelected.getBindingContext().getObject() // nos devolverá el objeto al que hace referencia la fila
+            let currency = rowObject.Moneda;
+            let activeEntityFlag = rowObject.IsActiveEntity;
+            
             oModel.callFunction("/get_tasa_usd", {
                 method: 'POST',
                 urlParameters: {
-                    Moneda: 'EUR',
-                    IsActiveEntity: true
+                    Moneda: currency,
+                    IsActiveEntity: activeEntityFlag
                 },
                 success: function(data){
-                    Messaging.removeAllMessages();
-                    data.results.forEach(function(message){
-                        const oMessage = new Message({
-                            message: message.Message,
-                            type: formatter.formatMessageType(message.Type),
-                            target: "/Dummy",
-                            processor: oView.getModel()
-                        });
-                        Messaging.addMessages(oMessage);
-                    }) 
+                    oModel.refresh(true);
+                    sap.m.MessageBox.success("Operación ejecutada correctamente");
                 },
                 error: function(error){
-                    debugger;
+                    sap.m.MessageBox.error("Error al ejecutar la operación");
                 }
             })
         },

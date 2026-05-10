@@ -10,43 +10,50 @@
 		<ComboBox
 				change=".onSelectingCurrency"
 				showClearIcon="true"
+				showSecondaryValues="true"
+				filterSecondaryValues= "true"
 				items="{
-					path: 'localModel>/Currencies',
-					sorter: { path: 'currencyName' }
+					path: '/I_CurrencyText',
+					sorter: { path: 'Currency' },
+					filters: [
+						{
+							path: 'Language',
+							operator: 'EQ',
+							value1: 'EN'
+						}
+					]
 				}">
-			<core:Item key="{localModel>currencyCode}" text="{localModel>currencyName}" />
+			<core:ListItem key="{Currency}" text="{CurrencyShortName}" additionalText = "{Currency}"/>
 		</ComboBox>
-		<Button text="Upload Data" press="onUploadData"/>
-		<Button text="Get Tasa USD" press="onGetTasaUSD"/>
         <Table id="testTable" items="{/ZC_FOREX_CURRENCY}" class="sapUiSmallMarginTop" mode="SingleSelectLeft" growing="true" growingThreshold="100">
             <columns>
 			<Column
 				width="12em">
-				<Text text="Moneda" />
-			</Column>
-			<Column
-				minScreenWidth="Desktop"
-				demandPopin="true"
-				hAlign="End">
-				<Text text="Descripción" />
+				<Text text="{i18n>moneda}" />
 			</Column>
 			<Column
 				minScreenWidth="Desktop"
 				demandPopin="true"
 				hAlign="Center">
-				<Text text="Region" />
+				<Text text="{i18n>simbolo}" />
+			</Column>
+			<Column
+				minScreenWidth="Desktop"
+				demandPopin="true"
+				hAlign="Center">
+				<Text text="{i18n>region}" />
 			</Column>
 			<Column
 				hAlign="End">
-				<Text text="Tasa USD" />
+				<Text text="{i18n>tasaUSD}" />
 			</Column>
 			<Column
 				hAlign="Center">
-				<Text text="Estado" />
+				<Text text="{i18n>estado}" />
 			</Column>
             <Column
-				hAlign="End">
-				<Text text="Last Sync" />
+				hAlign="Begin">
+				<Text text="{i18n>lastSync}" />
 			</Column>
 		</columns>
 		<items>
@@ -54,33 +61,37 @@
 				<cells>
 					<ObjectIdentifier
 						title="{Moneda}"
-						text="{Simbolo}"/>
+						text="{Nombre}"/>
 					<Text
-						text="{Nombre}" />
+						text="{Simbolo}" />
 					<Text
 						text="{Region}" />
 					<Text
-						text="{TasaUSD}" />
+						text="{path: 'TasaUSD', type: 'sap.ui.model.type.Float', formatOptions: { decimals: 2}}" />
 					<core:Icon
 						src="{path: 'Status', formatter: '.formatter.statusIcon'}" color="{path: 'Status', formatter: '.formatter.statusIconColor'}"/>
+					<!-- <Text
+						text="{LastSync}" /> -->
                     <Text
-						text="{path: 'LastSync',type:'sap.ui.model.type.Date',formatOptions: { UTC: true}}" />
+						text="{path: 'LastSync',type:'sap.ui.model.type.Date',formatOptions: { UTC: true, pattern: 'dd.MM.yyyy'}}" />
 				</cells>
 			</ColumnListItem>
 		</items>
         </Table>
 		<footer>
 			<OverflowToolbar>
-				<Button
+				<!-- <Button
 					icon="sap-icon://alert"
 					text="{= ${message>/}.length }"
 					visible="{= ${message>/}.length > 0 }"
 					type="Emphasized"
-					press=".onMessagePopoverPress" />
+					press=".onMessagePopoverPress" /> -->
+				<Button text="{i18n>uploadData}" type="Accept" press="onUploadData"/>
+				<Button text="{i18n>getUSDRate}" type="Reject" press="onGetTasaUSD"/>
 				<ToolbarSpacer/>
-				<Button text="Ir a Smart View" press="onNavigateToSmartView"/>
-				<Button text="Crear" press="onCreateTest"/>
-				<Button text="Borrar" press="onDeleteTest"/>
+				<Button text="{i18n>goToSmartView}"  type="Emphasized" press="onNavigateToSmartView"/>
+				<!-- <Button text="Crear" press="onCreateTest"/>
+				<Button text="Borrar" press="onDeleteTest"/> -->
 			</OverflowToolbar>
 		</footer>
     </Page>

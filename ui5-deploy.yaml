@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
+
+specVersion: "4.0"
+metadata:
+  name: devssummit2026
+type: application
+builder:
+  resources:
+    excludes:
+      - /test/**
+      - /localService/**
+  customTasks:
+    - name: deploy-to-abap
+      afterTask: generateCachebusterInfo
+      configuration:
+        target:
+          destination: SAP_OnPremise
+          url: http://virtuals12:44300
+          client: '101'
+        app:
+          name: ZTEST_DEVS_DGB
+          description: Aplicacion devs summit 2026 dgb
+          package: ZTEST_DEVS
+          transport: S12K904123
+        exclude:
+          - /test/
